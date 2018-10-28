@@ -36,7 +36,7 @@ public class SingerService {
 
     public Singer removeAlbumForSinger(Long singerId, Long albumId) throws Exception {
         Singer singer = singerRepository.findById(singerId).orElseThrow(() -> new Exception("Singer not found"));
-        singer.getAlbums().stream()
+        singer.getAlbums()
                 .forEach((Album album) -> {
                     if(album.getId().equals(albumId)){
                         singer.removeAlbum(album);

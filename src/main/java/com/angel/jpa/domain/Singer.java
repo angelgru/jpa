@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -43,7 +44,7 @@ public class Singer implements Serializable {
                     CascadeType.MERGE},
             fetch = FetchType.EAGER,
             orphanRemoval = true)
-    private Set<Album> albums;
+    private Set<Album> albums = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -51,7 +52,7 @@ public class Singer implements Serializable {
             joinColumns = {@JoinColumn(name = "SINGER_ID", referencedColumnName = "ID")},
             inverseJoinColumns = {@JoinColumn(name = "INSTRUMENT_ID", referencedColumnName = "ID")}
     )
-    private Set<Instrument> instruments;
+    private Set<Instrument> instruments = new HashSet<>();
 
     public void addAlbum(Album album) {
         log.error("ALBUM 1" + album.getTitle());
@@ -77,7 +78,6 @@ public class Singer implements Serializable {
     }
 
     public void remove(){
-        this.instruments.stream()
-                .forEach((Instrument ins) -> removeInstrument(ins));
+        this.instruments.forEach((Instrument ins) -> removeInstrument(ins));
     }
 }
